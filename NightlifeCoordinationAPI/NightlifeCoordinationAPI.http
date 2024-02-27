@@ -1,0 +1,6 @@
+@NightlifeCoordinationAPI_HostAddress = http://localhost:5264
+
+GET {{NightlifeCoordinationAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
