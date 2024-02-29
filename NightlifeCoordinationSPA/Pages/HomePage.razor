@@ -1,7 +1,26 @@
 ﻿@page "/"
 
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Data
+
+@inject HttpClient Http
+@inject NavigationManager Navigate
+
 <PageTitle>Nightlife - Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div>
+    @oUser?.Username
+    @oUser?.userId
+</div>
+
+
+@code {
+    UserResponseDto? oUser = new UserResponseDto();
+    public string Url = "/api/user";
+
+    protected override async Task OnInitializedAsync() =>
+    oUser = await Http.GetFromJsonAsync<UserResponseDto>(Url);
+}
