@@ -1,0 +1,29 @@
+@page "/account/login"
+
+<PageTitle>Nightlife - Login</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudPaper Class="pa-10 my-10 ">
+        <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+
+            <MudText Typo="Typo.h4">Login</MudText>
+
+            <MudTextField Label="Email" @bind-Value="_model.Email" For="@(() => _model.Email)" />
+
+            <MudTextField Label="Password" @bind-Value="_model.Password" For="@(() => _model.Password)"
+                InputType="InputType.Password" />
+
+            <div class="d-flex align-center justify-space-between">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                    Class="ml-auto">
+                    Login
+                </MudButton>
+            </div>
+
+            <div>
+                <p>@ErrorMessage</p>
+            </div>
+        </EditForm>
+    </MudPaper>
+</MudContainer>

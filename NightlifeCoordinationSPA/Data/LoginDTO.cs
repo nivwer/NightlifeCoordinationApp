@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NightlifeCoordinationSPA.Data;
 
-public class UserLoginDto
+public class LoginDTO
 {
     [Required(ErrorMessage = "Email is required!")]
     public string? Email { get; set; }

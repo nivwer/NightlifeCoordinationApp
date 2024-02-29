@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NightlifeCoordinationSPA.Data;
 
-public class UserRegisterDto
+public class RegisterDTO
 {
     [Required(ErrorMessage = "Email is required!")]
     [EmailAddress(ErrorMessage = "The email address is invalid")]
