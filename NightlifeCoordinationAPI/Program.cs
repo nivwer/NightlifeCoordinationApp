@@ -1,22 +1,40 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NightlifeCoordinationAPI.Data;
-
-var AllowSpecificOrigins = "AllowSpecificOrigin";
+using NightlifeCoordinationAPI.FrontEndClient.settings;
+using NightlifeCoordinationAPI.Services.YelpAPIService;
+using NightlifeCoordinationAPI.YelpAPI.settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// DB Context (SqLite)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default"))
 );
 
-
+// Identity Endpoints
 builder
     .Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Add services to the container.
-builder.Services.AddAuthorization();
+// YelpAPI HttpClient
+var YelpAPIConfig = builder.Configuration.GetSection("YelpAPI").Get<YelpAPISettings>()!;
+builder.Services.AddHttpClient(
+    "YelpAPI",
+    client =>
+    {
+        client.BaseAddress = new Uri(YelpAPIConfig.BaseUrl);
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", YelpAPIConfig.Key);
+    }
+);
+
+// CORS (Cross-origin resource sharing)
+var AllowSpecificOrigins = "AllowSpecificOrigin";
+
+var FrontEndClientConfig = builder
+    .Configuration.GetSection("FrontEndClient")
+    .Get<FrontEndClientSettings>()!;
 
 builder.Services.AddCors(options =>
 {
@@ -25,7 +43,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5207")
+                .WithOrigins(FrontEndClientConfig.BaseUrl)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
@@ -33,12 +51,18 @@ builder.Services.AddCors(options =>
     );
 });
 
+// Scopes
+builder.Services.AddScoped<IYelpAPIService, YelpAPIService>();
+
+// Add services to the container.
+builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// BUILD
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,7 +80,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.MapIdentityApi<IdentityUser>();
 
 app.Run();
