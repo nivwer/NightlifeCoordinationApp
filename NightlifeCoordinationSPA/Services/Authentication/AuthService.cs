@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.Authorization;
 using NightlifeCoordinationSPA.Data;
+using NightlifeCoordinationSPA.Providers;
 
 namespace NightlifeCoordinationSPA.Services.Authentication;
 
@@ -42,11 +43,16 @@ public class AuthService : IAuthService
             return oError ?? new ResponseDTO();
         }
 
+        ((AuthStateProvider)_authStateProvider).NotifyUserAuthentication();
         return new ResponseDTO() { IsSuccessfulAction = true };
     }
 
-    public Task Logout()
+    public async Task Logout()
     {
-        throw new NotImplementedException();
+        string Url = "/logout";
+        var response = await _http.PostAsJsonAsync(Url, new { });
+
+        if (response.IsSuccessStatusCode)
+            ((AuthStateProvider)_authStateProvider).NotifyUserLogout();
     }
 }

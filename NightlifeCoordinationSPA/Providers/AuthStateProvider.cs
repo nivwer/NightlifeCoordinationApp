@@ -22,40 +22,28 @@ public class AuthStateProvider : AuthenticationStateProvider
 
         // Get user if authenticated
         UserDTO? oUser = new UserDTO();
-        oUser = await _httpClient.GetFromJsonAsync<UserDTO>(Url);
+
+        try
+        {
+            oUser = await _httpClient.GetFromJsonAsync<UserDTO>(Url);
+        }
+        catch
+        {
+            oUser = null;
+        }
 
         if (oUser == null)
-            return _anonymous;
+            return await Task.FromResult(_anonymous);
 
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Email, oUser.Email!),
-        };
+        var claims = new List<Claim> { new Claim(ClaimTypes.Email, oUser.Email!), };
 
         var user = new ClaimsIdentity(claims, "sessionAuthType");
         return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(user)));
     }
 
-    // public async override Task<AuthenticationState> GetAuthenticationStateAsync()
-    // {
-    //     await Task.Delay(1500);
-    //     var claims = new List<Claim>
-    //     {
-    //         new Claim(ClaimTypes.Name, "John Doe"),
-    //         new Claim(ClaimTypes.Role, "Administrator")
-    //     };
-    //     var anonymous = new ClaimsIdentity(claims, "testAuthType");
-    //     return await Task.FromResult(new AuthenticationState(new ClaimsPrincipal(anonymous)));
-    // }
-
-    public void NotifyUserAuthentication(string email)
+    public void NotifyUserAuthentication()
     {
-        var authUser = new ClaimsPrincipal(
-            new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }, "sessionAuthType")
-        );
-
-        var authState = Task.FromResult(new AuthenticationState(authUser));
+        var authState = GetAuthenticationStateAsync();
         NotifyAuthenticationStateChanged(authState);
     }
 
