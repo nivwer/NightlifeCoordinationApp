@@ -8,6 +8,7 @@
 <AuthorizeView>
     <Authorized>
         The user: @context.User.FindFirst(ClaimTypes.Name)!.Value is authorized
+        The user: @context.User.FindFirst(ClaimTypes.Email)!.Value is authorized
 
 
         <h1>Counter</h1>

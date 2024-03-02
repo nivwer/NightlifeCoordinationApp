@@ -4,8 +4,12 @@
 @using System.Net.Http.Json
 @using Data
 
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+
 @inject HttpClient Http
 @inject NavigationManager Navigate
+
 
 <PageTitle>Nightlife - Home</PageTitle>
 
@@ -15,11 +19,16 @@
     @oUser?.Email
 </div>
 
+<AuthorizeView>
+    <Authorized>
+        The user: @context.User.FindFirst(ClaimTypes.Email)!.Value is authorized
+    </Authorized>
+    <NotAuthorized>
+        The User is not authorized
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     UserDTO? oUser = new UserDTO();
     public string Url = "/api/user";
-
-    protected override async Task OnInitializedAsync() =>
-    oUser = await Http.GetFromJsonAsync<UserDTO>(Url);
 }

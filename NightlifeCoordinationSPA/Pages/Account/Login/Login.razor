@@ -1,4 +1,5 @@
 @page "/account/login"
+@layout AuthLayout
 
 <PageTitle>Nightlife - Login</PageTitle>
 
@@ -24,6 +25,8 @@
             <div>
                 <p>@ErrorMessage</p>
             </div>
+
+            <MudNavLink Href="/account/register" Match="NavLinkMatch.All">register</MudNavLink>
         </EditForm>
     </MudPaper>
 </MudContainer>
