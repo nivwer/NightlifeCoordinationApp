@@ -19,9 +19,9 @@ public class BusinessController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetList()
+    public async Task<IActionResult> GetList([FromQuery] BusinessListQueryParamsDTO queryParams)
     {
-        var response = await _yelpAPIService.GetListBusinesses();
+        var response = await _yelpAPIService.GetListBusinesses(queryParams);
 
         if (!response.IsSuccessStatusCode)
         {
