@@ -4,5 +4,5 @@ namespace NightlifeCoordinationAPI.Services.YelpAPIService;
 
 public interface IYelpAPIService
 {
-    Task<HttpResponseMessage> GetListBusinesses();
+    Task<HttpResponseMessage> GetListBusinesses(BusinessListQueryParamsDTO queryParams);
 }
