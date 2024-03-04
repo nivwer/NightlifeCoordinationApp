@@ -14,36 +14,55 @@ public class YelpAPIService : IYelpAPIService
         _client = _http.CreateClient("YelpAPI");
     }
 
+    public async Task<HttpResponseMessage> GetBusinessById(string id, BusinessQueryParamsDTO queryParams)
+    {
+        string uri = $"v3/businesses/{id}";
+        var query = new StringBuilder();
+
+        AppendParam(query, "locale", queryParams.Locale);
+        AppendParam(query, "device_platform", queryParams.DevicePlatform);
+
+        if (query.Length > 0)
+        {
+            query.Length--;
+            uri += $"?{query}";
+        }
+
+        return await _client.GetAsync(uri);
+    }
+
     public async Task<HttpResponseMessage> GetListBusinesses(BusinessListQueryParamsDTO queryParams)
     {
-        var uriBuilder = new UriBuilder("v3/businesses/search");
-        var sQuery = new StringBuilder();
+        string uri = "v3/businesses/search";
+        var query = new StringBuilder();
 
-        AppendParam(sQuery, "location", queryParams.Location);
-        AppendParam(sQuery, "latitude", queryParams.Latitude);
-        AppendParam(sQuery, "longitude", queryParams.Longitude);
-        AppendParam(sQuery, "term", queryParams.Term);
-        AppendParam(sQuery, "radius", queryParams.Radius);
-        AppendParam(sQuery, "categories", queryParams.Categories);
-        AppendParam(sQuery, "locale", queryParams.Locale);
-        AppendParam(sQuery, "price", queryParams.Price);
-        AppendParam(sQuery, "open_now", queryParams.OpenNow);
-        AppendParam(sQuery, "open_at", queryParams.OpenAt);
-        AppendParam(sQuery, "attributes", queryParams.Attributes);
-        AppendParam(sQuery, "sort_by", queryParams.SortBy);
-        AppendParam(sQuery, "device_platform", queryParams.DevicePlatform);
-        AppendParam(sQuery, "reservation_date", queryParams.ReservationDate);
-        AppendParam(sQuery, "reservation_time", queryParams.ReservationTime);
-        AppendParam(sQuery, "reservation_covers", queryParams.ReservationCovers);
-        AppendParam(sQuery, "matches_party_size_param", queryParams.MatchesPartySizeParam);
-        AppendParam<int>(sQuery, "limit", queryParams.Limit);
-        AppendParam(sQuery, "offset", queryParams.Offset);
+        AppendParam(query, "location", queryParams.Location);
+        AppendParam(query, "latitude", queryParams.Latitude);
+        AppendParam(query, "longitude", queryParams.Longitude);
+        AppendParam(query, "term", queryParams.Term);
+        AppendParam(query, "radius", queryParams.Radius);
+        AppendParam(query, "categories", queryParams.Categories);
+        AppendParam(query, "locale", queryParams.Locale);
+        AppendParam(query, "price", queryParams.Price);
+        AppendParam(query, "open_now", queryParams.OpenNow);
+        AppendParam(query, "open_at", queryParams.OpenAt);
+        AppendParam(query, "attributes", queryParams.Attributes);
+        AppendParam(query, "sort_by", queryParams.SortBy);
+        AppendParam(query, "device_platform", queryParams.DevicePlatform);
+        AppendParam(query, "reservation_date", queryParams.ReservationDate);
+        AppendParam(query, "reservation_time", queryParams.ReservationTime);
+        AppendParam(query, "reservation_covers", queryParams.ReservationCovers);
+        AppendParam(query, "matches_party_size_param", queryParams.MatchesPartySizeParam);
+        AppendParam<int>(query, "limit", queryParams.Limit);
+        AppendParam(query, "offset", queryParams.Offset);
 
-        if (sQuery.Length > 0) sQuery.Length--;
+        if (query.Length > 0)
+        {
+            query.Length--;
+            uri += $"?{query}";
+        }
 
-        uriBuilder.Query = sQuery.ToString();
-
-        return await _client.GetAsync(uriBuilder.Uri);
+        return await _client.GetAsync(uri);
     }
 
     private static void AppendParam(StringBuilder sQuery, string parameter, string? s)
