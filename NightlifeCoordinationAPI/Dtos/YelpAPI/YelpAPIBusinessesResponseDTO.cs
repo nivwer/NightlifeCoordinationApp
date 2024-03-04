@@ -2,7 +2,7 @@ using NightlifeCoordinationAPI.Models;
 
 namespace NightlifeCoordinationAPI.Dtos;
 
-public class YelpAPIResponseDTO
+public class YelpAPIBusinessesResponseDTO
 {
     public List<Business>? Businesses { get; set; }
     public Region? Region { get; set; }
