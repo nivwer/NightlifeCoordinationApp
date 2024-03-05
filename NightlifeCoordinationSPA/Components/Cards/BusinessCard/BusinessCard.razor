@@ -1,0 +1,39 @@
+<MudCard Style="width: 330px;">
+    <MudCardMedia Image="@business.ImageUrl" Height="250" />
+
+    <MudCardContent style="min-height: 150px;">
+        <MudStack Spacing="1">
+
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <MudRating ReadOnly="true" Color="Color.Secondary"
+                    SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
+            </div>
+
+            <MudText Typo="Typo.h6" style="text-align: center;">
+                @business.Name
+            </MudText>
+
+            <MudStack Spacing="0" Row="true" style="flex-wrap: wrap; justify-content: center;">
+
+                @if (business.Categories != null)
+                {
+
+                    @foreach (var category in business.Categories)
+                    {
+
+                        <MudChip Variant="Variant.Text" Size="Size.Small">
+                            @category.Title
+                        </MudChip>
+                    }
+                }
+            </MudStack>
+
+        </MudStack>
+    </MudCardContent>
+
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+    </MudCardActions>
+
+</MudCard>
