@@ -15,10 +15,6 @@
 
 <h1>Hello, world!</h1>
 
-<div>
-    @oUser?.Email
-</div>
-
 <AuthorizeView>
     <Authorized>
         The user: @context.User.FindFirst(ClaimTypes.Email)!.Value is authorized
@@ -31,4 +27,8 @@
 @code {
     UserDTO? oUser = new UserDTO();
     public string Url = "/api/user";
+
+
+
+
 }
