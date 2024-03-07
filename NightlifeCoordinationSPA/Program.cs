@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using MudBlazor.Services;
 using NightlifeCoordinationSPA;
-using NightlifeCoordinationSPA.Providers;
-using NightlifeCoordinationSPA.Services.Authentication;
+using NightlifeCoordinationSPA.Providers.AuthStateProvider;
+using NightlifeCoordinationSPA.Services.AuthService;
+using NightlifeCoordinationSPA.Services.BusinessesService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,8 +20,10 @@ builder.Services.AddScoped(sp => new HttpClient(new CookieHandler())
 });
 
 builder.Services.AddAuthorizationCore();
+
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBusinessesService, BusinessesService>();
 
 await builder.Build().RunAsync();
 

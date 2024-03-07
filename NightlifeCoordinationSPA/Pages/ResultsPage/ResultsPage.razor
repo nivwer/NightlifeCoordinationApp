@@ -1,0 +1,22 @@
+@page "/results"
+
+@using NightlifeCoordinationSPA.Components.Cards.BusinessCard
+
+<PageTitle>Nightlife - Results</PageTitle>
+
+@* <MudStack Row="true">
+    <div style="background-color: aqua; width: 40px; height: 40px;"></div>
+    <div style="background-color: aqua; width: 40px; height: 40px;"></div>
+    <div style="background-color: aqua; width: 40px; height: 40px;"></div>
+    <div style="background-color: aqua; width: 40px; height: 40px;"></div>
+</MudStack> *@
+
+
+
+<MudStack Row="true" Class="flex-wrap">
+    @foreach (var business in Businesses)
+    {
+        <BusinessCard business="@business" />
+    }
+
+</MudStack>

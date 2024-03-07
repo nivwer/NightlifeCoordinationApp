@@ -1,0 +1,38 @@
+@page "/account/register"
+
+@layout NightlifeCoordinationSPA.Layout.Layouts.AuthLayout.AuthLayout
+
+<PageTitle>Nightlife - Register</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudPaper Class="pa-10 my-10 ">
+        <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+
+            <MudText Typo="Typo.h4">Register</MudText>
+
+            <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
+
+            <MudTextField Label="Password" @bind-Value="Model.Password" For="@(() => Model.Password)"
+                InputType="InputType.Password" HelperText="Choose a strong password" />
+
+            <MudTextField Label="Password" @bind-Value="Model.Password2" For="@(() => Model.Password2)"
+                InputType="InputType.Password" HelperText="Repeat the password" />
+
+            <div class="d-flex align-center justify-space-between">
+                <MudCheckBox T="bool" Label="I agree!" Required="true" />
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
+                    Class="ml-auto">
+                    Register
+                </MudButton>
+            </div>
+
+            <div>
+                <p>@ErrorMessage</p>
+            </div>
+
+            <MudNavLink Href="/account/login" Match="NavLinkMatch.All">login</MudNavLink>
+        </EditForm>
+    </MudPaper>
+</MudContainer>

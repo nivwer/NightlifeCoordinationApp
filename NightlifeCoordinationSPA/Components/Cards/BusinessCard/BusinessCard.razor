@@ -1,4 +1,4 @@
-<MudCard Style="width: 330px;">
+<MudCard Style="width: 30%;">
     <MudCardMedia Image="@business.ImageUrl" Height="250" />
 
     <MudCardContent style="min-height: 150px;">
@@ -8,6 +8,8 @@
                 <MudRating ReadOnly="true" Color="Color.Secondary"
                     SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
             </div>
+
+
 
             <MudText Typo="Typo.h6" style="text-align: center;">
                 @business.Name
