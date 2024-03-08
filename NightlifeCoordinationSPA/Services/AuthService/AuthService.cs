@@ -16,26 +16,20 @@ public class AuthService : IAuthService
         AuthStateProvider = authStateProvider;
     }
 
-
     public async Task<AuthResponseDTO> Register(AuthRegisterDTO data)
     {
         string uri = "/register";
 
         var response = await Http.PostAsJsonAsync<AuthRegisterDTO>(uri, data);
 
-        var oResponse = await response.Content.ReadFromJsonAsync<AuthResponseDTO>()
-            ?? new AuthResponseDTO();
-
         if (!response.IsSuccessStatusCode)
-            return oResponse;
+        {
+            return await response.Content.ReadFromJsonAsync<AuthResponseDTO>()
+                ?? new AuthResponseDTO();
+        }
 
-        oResponse.Success = true;
-
-        return oResponse;
+        return new AuthResponseDTO() { Success = true };
     }
-
-
-
 
     public async Task<AuthResponseDTO> Login(AuthLoginDTO data)
     {
@@ -43,24 +37,26 @@ public class AuthService : IAuthService
 
         var response = await Http.PostAsJsonAsync<AuthLoginDTO>(uri, data);
 
-        var oResponse = await response.Content.ReadFromJsonAsync<AuthResponseDTO>()
-            ?? new AuthResponseDTO();
-
         if (!response.IsSuccessStatusCode)
-            return oResponse;
+        {
+            return await response.Content.ReadFromJsonAsync<AuthResponseDTO>()
+                ?? new AuthResponseDTO();
+        }
 
-        oResponse.Success = true;
         ((AuthStateProvider)AuthStateProvider).NotifyUserAuthentication();
 
-        return oResponse;
+        return new AuthResponseDTO() { Success = true };
     }
 
     public async Task Logout()
     {
         string uri = "/logout";
+
         var response = await Http.PostAsJsonAsync(uri, new { });
 
         if (response.IsSuccessStatusCode)
+        {
             ((AuthStateProvider)AuthStateProvider).NotifyUserLogout();
+        }
     }
 }
