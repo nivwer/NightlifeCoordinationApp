@@ -4,30 +4,47 @@
 
 <PageTitle>Nightlife - Login</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Small">
-    <MudPaper Class="pa-10 my-10 ">
-        <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator />
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
 
-            <MudText Typo="Typo.h4">Login</MudText>
+    <MudPaper Class="pa-10 py-12 d-flex justify-center align-center flex-column">
+        <MudStack Spacing="1" Style="width: 100%; max-width: 100%;">
+            <MudStack Spacing="3" Style="text-align: center;">
+                <MudText Typo="Typo.h4">
+                    Log In
+                </MudText>
+                <MudText>
+                    Log in to your account
+                </MudText>
+            </MudStack>
+            <MudStack Spacing="8">
+                <MudStack Spacing="2">
 
-            <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
+                    @if (ShowErrorMessage)
+                    {
+                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true" CloseIconClicked="(()=> CloseError())" Class="my-2">
+                            @ErrorMessage
+                        </MudAlert>
+                    }
 
-            <MudTextField Label="Password" @bind-Value="Model.Password" For="@(() => Model.Password)"
-                InputType="InputType.Password" />
+                    <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
 
-            <div class="d-flex align-center justify-space-between">
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
-                    Class="ml-auto">
+                    <MudTextField Label="Password" @bind-Value="Model.Password" InputType="InputType.Password"
+                        For="@(() => Model.Password)" />
+                </MudStack>
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                    Style="width: 100%;">
                     Login
                 </MudButton>
-            </div>
-
-            <div>
-                <p>@ErrorMessage</p>
-            </div>
-
-            <MudNavLink Href="/account/register" Match="NavLinkMatch.All">register</MudNavLink>
-        </EditForm>
+            </MudStack>
+        </MudStack>
     </MudPaper>
-</MudContainer>
+</EditForm>
+
+<MudText Class="py-6" Style="width: 100%; text-align: center;">
+    Don't have an account?
+    <MudLink Href="/account/register" Match="NavLinkMatch.All" Color="Color.Secondary">
+        Register
+    </MudLink>
+</MudText>

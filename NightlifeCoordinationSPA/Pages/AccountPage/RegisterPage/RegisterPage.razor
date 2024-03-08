@@ -4,35 +4,50 @@
 
 <PageTitle>Nightlife - Register</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Small">
-    <MudPaper Class="pa-10 my-10 ">
-        <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator />
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    
+    <MudPaper Class="pa-10 py-12 d-flex justify-center align-center flex-column">
+        <MudStack Spacing="1" Style="width: 100%; max-width: 100%;">
+            <MudStack Spacing="3" Style="text-align: center;">
+                <MudText Typo="Typo.h4">
+                    Register
+                </MudText>
+                <MudText>
+                    Create your account
+                </MudText>
+            </MudStack>
+            <MudStack Spacing="8">
+                <MudStack Spacing="2">
 
-            <MudText Typo="Typo.h4">Register</MudText>
+                    @if (ShowErrorMessage)
+                    {
+                        <MudAlert Severity="Severity.Error" Class="my-2">
+                            @ErrorMessage
+                        </MudAlert>
+                    }
 
-            <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
+                    <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
 
-            <MudTextField Label="Password" @bind-Value="Model.Password" For="@(() => Model.Password)"
-                InputType="InputType.Password" HelperText="Choose a strong password" />
+                    <MudTextField Label="Password" @bind-Value="Model.Password" InputType="InputType.Password"
+                        For="@(() => Model.Password)" />
 
-            <MudTextField Label="Password" @bind-Value="Model.Password2" For="@(() => Model.Password2)"
-                InputType="InputType.Password" HelperText="Repeat the password" />
+                    <MudTextField Label="Confirm Password" @bind-Value="Model.Password2" InputType="InputType.Password"
+                        For="@(() => Model.Password2)" />
+                </MudStack>
 
-            <div class="d-flex align-center justify-space-between">
-                <MudCheckBox T="bool" Label="I agree!" Required="true" />
-
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary"
-                    Class="ml-auto">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
+                    Style="width: 100%;">
                     Register
                 </MudButton>
-            </div>
-
-            <div>
-                <p>@ErrorMessage</p>
-            </div>
-
-            <MudNavLink Href="/account/login" Match="NavLinkMatch.All">login</MudNavLink>
-        </EditForm>
+            </MudStack>
+        </MudStack>
     </MudPaper>
-</MudContainer>
+</EditForm>
+
+<MudText Class="py-6" Style="width: 100%; text-align: center;">
+    Already have an account?
+    <MudLink Href="/account/login" Match="NavLinkMatch.All" Color="Color.Secondary">
+        Log In
+    </MudLink>
+</MudText>

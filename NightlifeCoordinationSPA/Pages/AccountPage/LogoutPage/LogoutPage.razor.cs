@@ -14,6 +14,6 @@ public partial class LogoutPage
     protected override async Task OnInitializedAsync()
     {
         await AuthService!.Logout();
-        Navigate!.NavigateTo("/");
+        Navigate!.NavigateTo("/account/login");
     }
 }

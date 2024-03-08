@@ -13,6 +13,7 @@ public partial class LoginPage
 
     [Inject]
     public NavigationManager? Navigate { get; set; }
+
     public bool ShowErrorMessage { get; set; }
     public string? ErrorMessage { get; set; }
 
@@ -21,19 +22,25 @@ public partial class LoginPage
         ShowErrorMessage = false;
 
         var response = await AuthService!.Login(Model);
+
         if (!response.Success)
         {
             ShowErrorMessage = true;
 
-            if (response.Errors == null)
-                ErrorMessage = "An unexpected error occurred.";
-            else
+            if (response.Status == 401)
                 ErrorMessage = "Authentication failed.";
+            else
+                ErrorMessage = "An unexpected error occurred.";
         }
         else
         {
             StateHasChanged();
             Navigate!.NavigateTo("/");
         }
+    }
+
+    public void CloseError()
+    {
+        ShowErrorMessage = false;
     }
 }

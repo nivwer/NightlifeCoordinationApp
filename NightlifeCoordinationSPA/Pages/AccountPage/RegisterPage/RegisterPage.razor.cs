@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using NightlifeCoordinationSPA.DTOs.AuthDTOs;
 using NightlifeCoordinationSPA.Services.AuthService;
 
@@ -13,6 +14,10 @@ public partial class RegisterPage
 
     [Inject]
     public NavigationManager? Navigate { get; set; }
+
+    [Inject]
+    public ISnackbar? Snackbar { get; set; }
+
     public bool ShowErrorMessage { get; set; }
     public string? ErrorMessage { get; set; }
 
@@ -21,12 +26,13 @@ public partial class RegisterPage
         ShowErrorMessage = false;
 
         var response = await AuthService!.Register(Model);
+
         if (!response.Success)
         {
             ShowErrorMessage = true;
 
             if (response.Errors == null)
-                ErrorMessage = "An unexpected error occurred. Please contact support.";
+                ErrorMessage = "An unexpected error occurred.";
             else if (response.Errors.ContainsKey("DuplicateUserName"))
                 ErrorMessage = "Email already taken";
             else
@@ -35,7 +41,11 @@ public partial class RegisterPage
         else
         {
             StateHasChanged();
-            Navigate!.NavigateTo("/login");
+
+            string message = "Congratulations! Your registration was successful.";
+            Snackbar!.Add(message, Severity.Success);
+
+            Navigate!.NavigateTo("/account/login");
         }
     }
 }
