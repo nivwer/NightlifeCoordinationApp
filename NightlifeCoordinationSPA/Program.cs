@@ -7,6 +7,7 @@ using NightlifeCoordinationSPA;
 using NightlifeCoordinationSPA.Providers.AuthStateProvider;
 using NightlifeCoordinationSPA.Services.AuthService;
 using NightlifeCoordinationSPA.Services.BusinessesService;
+using MudBlazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,11 +20,19 @@ builder.Services.AddScoped(sp => new HttpClient(new CookieHandler())
     BaseAddress = new Uri("http://localhost:5264")
 });
 
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBusinessesService, BusinessesService>();
+
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
+    config.SnackbarConfiguration.SnackbarVariant = Variant.Text;
+});
 
 await builder.Build().RunAsync();
 
