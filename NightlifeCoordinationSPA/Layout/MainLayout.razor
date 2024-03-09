@@ -11,8 +11,9 @@
         <MudSpacer />
         <NavBar />
     </MudAppBar>
-    <MudDrawer @bind-Open="DrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-       <NavMenu />
+    <MudDrawer @bind-Open="DrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2" Variant="@DrawerVariant.Mini"
+        Breakpoint="@Breakpoint.Lg">
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
         @Body

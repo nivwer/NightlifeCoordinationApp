@@ -1,0 +1,10 @@
+@inherits LayoutComponentBase
+
+@layout MainLayout
+
+<MudDrawer @bind-Open="@DrawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End"
+    Variant="@DrawerVariant.Responsive">
+</MudDrawer>
+<MudContainer>
+    @Body
+</MudContainer>

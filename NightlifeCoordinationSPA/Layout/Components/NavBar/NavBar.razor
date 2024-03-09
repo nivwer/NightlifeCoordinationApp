@@ -1,11 +1,56 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 
+<NavLink Href="/search" Match="NavLinkMatch.All">
+    <MudIconButton Icon="@Icons.Material.Filled.Search" Color="Color.Default" aria-label="search" />
+</NavLink>
 <AuthorizeView>
     <Authorized>
-        <MudStack Spacing="4" Row="true">
-            <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Primary" >@context.User.FindFirst(ClaimTypes.Email)!.Value</MudChip>
-            <MudAvatar Color="Color.Primary">@context.User.FindFirst(ClaimTypes.Email)!.Value[0]</MudAvatar>
-        </MudStack>
+        <MudMenu Variant="Variant.Filled" Size="Size.Large" AnchorOrigin="Origin.BottomRight"
+            TransformOrigin="Origin.TopRight">
+            <ActivatorContent>
+                <MudAvatar Color="Color.Primary">
+                    @context.User.FindFirst(ClaimTypes.Email)!.Value[0]
+                </MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <MudStack Class="mx-8 my-3 justify-center align-center ">
+                    <MudAvatar Color="Color.Primary" Size="Size.Large">
+                        @context.User.FindFirst(ClaimTypes.Email)!.Value[0]
+                    </MudAvatar>
+
+                    <NavLink Href="/account" Match="NavLinkMatch.All">
+                        <MudChip Variant="Variant.Text" Color="Color.Primary" Icon="@Icons.Material.Filled.Person">
+                            @context.User.FindFirst(ClaimTypes.Email)!.Value
+                        </MudChip>
+                    </NavLink>
+                </MudStack>
+
+
+                <NavLink Href="/account" Match="NavLinkMatch.All">
+                    <MudMenuItem>
+                        Account
+                    </MudMenuItem>
+                </NavLink>
+                <NavLink Href="/account/logout" Match="NavLinkMatch.All">
+                    <MudMenuItem>
+                        Log Out
+                    </MudMenuItem>
+                </NavLink>
+            </ChildContent>
+        </MudMenu>
     </Authorized>
+    <NotAuthorized>
+        @* <MudDivider Vertical="true" FlexItem="true" DividerType="DividerType.Middle" Class="my-5" /> *@
+        <MudStack>
+            <MudButtonGroup Color="Color.Primary" Variant="Variant.Text">
+                <NavLink Href="/account/login" Match="NavLinkMatch.All">
+                    <MudButton>Log In</MudButton>
+                </NavLink>
+                <NavLink Href="/account/register" Match="NavLinkMatch.All">
+                    <MudButton>Register</MudButton>
+                </NavLink>
+            </MudButtonGroup>
+        </MudStack>
+    </NotAuthorized>
 </AuthorizeView>
