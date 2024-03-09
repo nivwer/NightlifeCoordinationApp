@@ -5,20 +5,15 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-            OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"
+            Icon="@(DrawerOpen ? Icons.Material.Filled.ArrowBackIosNew : Icons.Material.Filled.Menu)" />
+        <MudText Typo="Typo.h5" Class="mt-1">Nightlife</MudText>
         <MudSpacer />
-        @* <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" /> *@
         <NavBar />
     </MudAppBar>
-
-    <MudDrawer @bind-Open="DrawerOpen" Elevation="2">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Class="mt-1">Nightlife</MudText>
-        </MudDrawerHeader>
-        <NavMenu />
+    <MudDrawer @bind-Open="DrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+       <NavMenu />
     </MudDrawer>
-
     <MudMainContent>
         @Body
     </MudMainContent>
