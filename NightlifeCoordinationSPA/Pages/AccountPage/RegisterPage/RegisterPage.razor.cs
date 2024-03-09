@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using NightlifeCoordinationSPA.DTOs.AuthDTOs;
+using NightlifeCoordinationSPA.Helpers.InputPasswordManager;
 using NightlifeCoordinationSPA.Services.AuthService;
 
 namespace NightlifeCoordinationSPA.Pages.AccountPage.RegisterPage;
@@ -18,8 +20,14 @@ public partial class RegisterPage
     [Inject]
     public ISnackbar? Snackbar { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
     public bool ShowErrorMessage { get; set; }
     public string? ErrorMessage { get; set; }
+
+    public InputPasswordManager Password = new InputPasswordManager();
+    public InputPasswordManager Password2 = new InputPasswordManager();
 
     public async Task OnValidSubmit()
     {
@@ -47,5 +55,22 @@ public partial class RegisterPage
 
             Navigate!.NavigateTo("/account/login");
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationStateTask != null)
+        {
+            var authState = await AuthenticationStateTask;
+            if (authState.User.Identity!.IsAuthenticated)
+            {
+                Navigate!.NavigateTo("/");
+            }
+        }
+    }
+
+    public void HandleCloseError()
+    {
+        ShowErrorMessage = false;
     }
 }

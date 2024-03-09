@@ -22,15 +22,17 @@
 
                     @if (ShowErrorMessage)
                     {
-                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true" CloseIconClicked="(()=> CloseError())" Class="my-2">
+                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
+                            CloseIconClicked="(()=> HandleCloseError())" Class="my-2">
                             @ErrorMessage
                         </MudAlert>
                     }
 
                     <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
 
-                    <MudTextField Label="Password" @bind-Value="Model.Password" InputType="InputType.Password"
-                        For="@(() => Model.Password)" />
+                    <MudTextField Label="Password" @bind-Value="Model.Password" For="@(() => Model.Password)"
+                        InputType="@Password.PasswordInput" Adornment="Adornment.End"
+                        AdornmentIcon="@Password.PasswordInputIcon" OnAdornmentClick="@Password.HandleShowPassword" />
                 </MudStack>
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"

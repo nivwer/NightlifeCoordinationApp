@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using NightlifeCoordinationSPA.DTOs.AuthDTOs;
+using NightlifeCoordinationSPA.Helpers.InputPasswordManager;
 using NightlifeCoordinationSPA.Services.AuthService;
 
 namespace NightlifeCoordinationSPA.Pages.AccountPage.LoginPage;
@@ -14,8 +16,13 @@ public partial class LoginPage
     [Inject]
     public NavigationManager? Navigate { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
     public bool ShowErrorMessage { get; set; }
     public string? ErrorMessage { get; set; }
+
+    public InputPasswordManager Password = new InputPasswordManager();
 
     public async Task OnValidSubmit()
     {
@@ -39,7 +46,19 @@ public partial class LoginPage
         }
     }
 
-    public void CloseError()
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationStateTask != null)
+        {
+            var authState = await AuthenticationStateTask;
+            if (authState.User.Identity!.IsAuthenticated)
+            {
+                Navigate!.NavigateTo("/");
+            }
+        }
+    }
+
+    public void HandleCloseError()
     {
         ShowErrorMessage = false;
     }

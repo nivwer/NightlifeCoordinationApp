@@ -6,7 +6,7 @@
 
 <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    
+
     <MudPaper Class="pa-10 py-12 d-flex justify-center align-center flex-column">
         <MudStack Spacing="1" Style="width: 100%; max-width: 100%;">
             <MudStack Spacing="3" Style="text-align: center;">
@@ -22,18 +22,21 @@
 
                     @if (ShowErrorMessage)
                     {
-                        <MudAlert Severity="Severity.Error" Class="my-2">
+                        <MudAlert Severity="Severity.Error" ShowCloseIcon="true"
+                            CloseIconClicked="(()=> HandleCloseError())" Class="my-2">
                             @ErrorMessage
                         </MudAlert>
                     }
 
                     <MudTextField Label="Email" @bind-Value="Model.Email" For="@(() => Model.Email)" />
 
-                    <MudTextField Label="Password" @bind-Value="Model.Password" InputType="InputType.Password"
-                        For="@(() => Model.Password)" />
+                    <MudTextField Label="Password" @bind-Value="Model.Password" For="@(() => Model.Password)"
+                        InputType="@Password.PasswordInput" Adornment="Adornment.End"
+                        AdornmentIcon="@Password.PasswordInputIcon" OnAdornmentClick="@Password.HandleShowPassword" />
 
-                    <MudTextField Label="Confirm Password" @bind-Value="Model.Password2" InputType="InputType.Password"
-                        For="@(() => Model.Password2)" />
+                    <MudTextField Label="Confirm Password" @bind-Value="Model.Password2" For="@(() => Model.Password2)"
+                        InputType="@Password2.PasswordInput" Adornment="Adornment.End"
+                        AdornmentIcon="@Password2.PasswordInputIcon" OnAdornmentClick="@Password2.HandleShowPassword" />
                 </MudStack>
 
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto"
