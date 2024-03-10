@@ -1,41 +1,45 @@
-<MudCard Style="width: 30%;">
-    <MudCardMedia Image="@business.ImageUrl" Height="250" />
+<MudPaper Class="d-flex rounded-lg">
+    <MudImage ObjectFit="ObjectFit.Cover" Height="200" Width="200" Src="@business.ImageUrl" Alt="Örebro Slott"
+        Elevation="25" Class="rounded-l-lg" />
+    <MudStack Spacing="1" Class="pa-5">
+        <MudText Typo="Typo.h6">
+            @business.Name
+        </MudText>
+        <MudStack Spacing="0" Row="true" Class="flex-wrap">
+            <MudRating ReadOnly="true" Color="Color.Secondary"
+                SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
 
-    <MudCardContent style="min-height: 150px;">
-        <MudStack Spacing="1">
+            <MudStack Row="true" Spacing="1" Class="ml-2">
+                <MudText Typo="Typo.body2">
+                    <b>@business.Rating</b>
+                </MudText>
 
-            <div style="width: 100%; display: flex; justify-content: center;">
-                <MudRating ReadOnly="true" Color="Color.Secondary"
-                    SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
-            </div>
-
-
-
-            <MudText Typo="Typo.h6" style="text-align: center;">
-                @business.Name
-            </MudText>
-
-            <MudStack Spacing="0" Row="true" style="flex-wrap: wrap; justify-content: center;">
-
-                @if (business.Categories != null)
-                {
-
-                    @foreach (var category in business.Categories)
-                    {
-
-                        <MudChip Variant="Variant.Text" Size="Size.Small">
-                            @category.Title
-                        </MudChip>
-                    }
-                }
+                <MudText Typo="Typo.body2">
+                    (@business.ReviewCount reviews)
+                </MudText>
             </MudStack>
-
         </MudStack>
-    </MudCardContent>
 
-    <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
-    </MudCardActions>
+        <MudStack Spacing="0" Row="true" Class="flex-wrap">
 
-</MudCard>
+            @if (business.Categories != null)
+            {
+                @foreach (var category in business.Categories)
+                {
+                    <MudChip Variant="Variant.Text" Size="Size.Small">
+                        @category.Title
+                    </MudChip>
+                }
+            }
+            
+        </MudStack>
+
+        @if (business.IsClosed.HasValue)
+        {
+            <MudText Color="@(business.IsClosed.Value ? Color.Error : Color.Success)">
+                <b>@(business.IsClosed.Value ? "Closed" : "Open")</b>
+            </MudText>
+        }
+
+    </MudStack>
+</MudPaper>
