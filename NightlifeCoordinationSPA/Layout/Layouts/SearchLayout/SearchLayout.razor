@@ -3,8 +3,29 @@
 @layout MainLayout
 
 <MudDrawer @bind-Open="@DrawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End"
-    Variant="@DrawerVariant.Responsive">
+    Variant="@DrawerVariant.Responsive" Style="background-color: transparent;" Elevation="0">
 </MudDrawer>
 <MudContainer>
+
+    <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+
+        <MudPaper Class="py-10 my-5" Style="background-color: transparent;" Elevation="0">
+            <MudText Typo="Typo.h4">
+                Search
+            </MudText>
+
+            <MudStack Row="true">
+                <MudTextField @bind-Value="@Model.Keyword" Variant="Variant.Text" Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Secondary"
+                    Placeholder="Search" />
+
+                <MudTextField @bind-Value="@Model.Location" Variant="Variant.Text" Adornment="Adornment.Start"
+                    AdornmentIcon="@Icons.Material.Filled.LocationOn" AdornmentColor="Color.Secondary"
+                    Placeholder="Address, Neighborhood, City, State or ZIP" />
+            </MudStack>
+        </MudPaper>
+    </EditForm>
+
     @Body
 </MudContainer>
