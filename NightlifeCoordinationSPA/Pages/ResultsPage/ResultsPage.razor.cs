@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using NightlifeCoordinationSPA.DTOs.BusinessDTOs;
 using NightlifeCoordinationSPA.Models;
 using NightlifeCoordinationSPA.Services.BusinessesService;
 
@@ -7,6 +8,8 @@ namespace NightlifeCoordinationSPA.Pages.ResultsPage;
 public partial class ResultsPage
 {
     public List<Business> Businesses = new List<Business>();
+
+    public BusinessListQueryDTO QueryParams = new BusinessListQueryDTO();
 
     [Inject]
     public IBusinessesService? BusinessesService { get; set; }
@@ -17,6 +20,13 @@ public partial class ResultsPage
     public bool ShowErrorMessage { get; set; }
     public string? ErrorMessage { get; set; }
 
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "query")]
+    public string? Keyword { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "location")]
+    public string? Location { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,7 +34,10 @@ public partial class ResultsPage
 
         if (BusinessesService != null)
         {
-            var response = await BusinessesService.GetList();
+            QueryParams.Keyword = Keyword ?? string.Empty;
+            QueryParams.Location = Location ?? string.Empty;
+
+            var response = await BusinessesService.GetList(QueryParams);
 
             if (!response.Success)
             {
@@ -40,7 +53,7 @@ public partial class ResultsPage
             {
                 if (response.Businesses != null)
                     Businesses = response.Businesses;
-                    
+
                 StateHasChanged();
             }
         }

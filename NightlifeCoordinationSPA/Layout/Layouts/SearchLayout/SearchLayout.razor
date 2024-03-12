@@ -5,6 +5,7 @@
 <MudDrawer @bind-Open="@DrawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End"
     Variant="@DrawerVariant.Responsive" Style="background-color: transparent;" Elevation="0">
 </MudDrawer>
+
 <MudContainer>
 
     <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
@@ -23,6 +24,9 @@
                 <MudTextField @bind-Value="@Model.Location" Variant="Variant.Text" Adornment="Adornment.Start"
                     AdornmentIcon="@Icons.Material.Filled.LocationOn" AdornmentColor="Color.Secondary"
                     Placeholder="Address, Neighborhood, City, State or ZIP" />
+
+                <MudFab ButtonType="ButtonType.Submit" DisableElevation="true" Color="Color.Primary"
+                    StartIcon="@Icons.Material.Filled.Search" />
             </MudStack>
         </MudPaper>
     </EditForm>

@@ -5,5 +5,5 @@ namespace NightlifeCoordinationSPA.Services.BusinessesService;
 public interface IBusinessesService
 {
     Task<BusinessResponseDTO> GetById();
-    Task<BusinessListResponseDTO> GetList();
+    Task<BusinessListResponseDTO> GetList(BusinessListQueryDTO queryParams);
 }
