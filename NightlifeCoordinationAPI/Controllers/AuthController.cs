@@ -7,11 +7,11 @@ namespace NightlifeCoordinationAPI.Controllers;
 [Route("/")]
 public class AuthController : ControllerBase
 {
-    public SignInManager<IdentityUser> _signInManager { get; set; }
+    public SignInManager<IdentityUser> SignInManager { get; set; }
 
     public AuthController(SignInManager<IdentityUser> signInManager)
     {
-        _signInManager = signInManager;
+        SignInManager = signInManager;
     }
 
     [HttpPost]
@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
             return Unauthorized();
         }
 
-        await _signInManager.SignOutAsync();
+        await SignInManager.SignOutAsync();
         return Ok();
     }
 }

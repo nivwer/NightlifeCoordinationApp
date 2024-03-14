@@ -1,4 +1,4 @@
-namespace NightlifeCoordinationAPI.Dtos;
+namespace NightlifeCoordinationAPI.DTOs.YelpAPIDTOs;
 
 public class ErrorDetails
 {

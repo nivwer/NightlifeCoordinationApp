@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using NightlifeCoordinationAPI.Models;
 
-namespace NightlifeCoordinationAPI.Dtos;
+namespace NightlifeCoordinationAPI.DTOs.YelpAPIDTOs;
 
 public class YelpAPIBusinessResponseDTO : Business
 {

@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using NightlifeCoordinationAPI.Dtos;
+using NightlifeCoordinationAPI.DTOs.BusinessDTOs;
+using NightlifeCoordinationAPI.DTOs.YelpAPIDTOs;
 using NightlifeCoordinationAPI.Services.YelpAPIService;
 
 namespace NightlifeCoordinationAPI.Controllers;
@@ -9,17 +10,17 @@ namespace NightlifeCoordinationAPI.Controllers;
 [ApiController]
 public class BusinessController : ControllerBase
 {
-    private readonly IYelpAPIService _yelpAPIService;
+    private readonly IYelpAPIService YelpAPIService;
 
     public BusinessController(IYelpAPIService yelpAPIService)
     {
-        _yelpAPIService = yelpAPIService;
+        YelpAPIService = yelpAPIService;
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] string id, [FromQuery] BusinessQueryParamsDTO queryParams)
     {
-        var response = await _yelpAPIService.GetBusinessById(id, queryParams);
+        var response = await YelpAPIService.GetBusinessById(id, queryParams);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -58,7 +59,7 @@ public class BusinessController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetList([FromQuery] BusinessListQueryParamsDTO queryParams)
     {
-        var response = await _yelpAPIService.GetListBusinesses(queryParams);
+        var response = await YelpAPIService.GetListBusinesses(queryParams);
 
         if (!response.IsSuccessStatusCode)
         {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NightlifeCoordinationAPI.Dtos;
+namespace NightlifeCoordinationAPI.DTOs.BusinessDTOs;
 
 public class BusinessQueryParamsDTO
 {
