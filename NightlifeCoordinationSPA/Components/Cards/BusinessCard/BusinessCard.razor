@@ -31,15 +31,28 @@
                     </MudChip>
                 }
             }
-            
+
         </MudStack>
 
-        @if (business.IsClosed.HasValue)
-        {
-            <MudText Color="@(business.IsClosed.Value ? Color.Error : Color.Success)">
-                <b>@(business.IsClosed.Value ? "Closed" : "Open")</b>
-            </MudText>
-        }
-
+        <MudStack Spacing="2" Row="true">
+            @if (business.IsClosed.HasValue)
+            {
+                <MudText Color="@(business.IsClosed.Value ? Color.Error : Color.Success)">
+                    <b>@(business.IsClosed.Value ? "Closed" : "Open")</b>
+                </MudText>
+            }
+            @if (!string.IsNullOrEmpty(business.Price) && business.IsClosed.HasValue)
+            {
+                <MudText>
+                    <b>·</b>
+                </MudText>
+            }
+            @if (!string.IsNullOrEmpty(business.Price))
+            {
+                <MudText>
+                    <b>@business.Price</b>
+                </MudText>
+            }
+        </MudStack>
     </MudStack>
 </MudPaper>

@@ -28,14 +28,18 @@ public partial class ResultsPage
     [SupplyParameterFromQuery(Name = "location")]
     public string? Location { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async void OnParametersSet()
     {
         ShowErrorMessage = false;
 
-        if (BusinessesService != null)
+        if (
+            BusinessesService != null 
+            && !string.IsNullOrWhiteSpace(Keyword) 
+            && !string.IsNullOrWhiteSpace(Location)
+        )
         {
-            QueryParams.Keyword = Keyword ?? string.Empty;
-            QueryParams.Location = Location ?? string.Empty;
+            QueryParams.Keyword = Keyword;
+            QueryParams.Location = Location;
 
             var response = await BusinessesService.GetList(QueryParams);
 
