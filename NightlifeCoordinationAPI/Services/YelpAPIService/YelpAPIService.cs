@@ -1,4 +1,3 @@
-using System.Text;
 using NightlifeCoordinationAPI.DTOs.BusinessDTOs;
 using NightlifeCoordinationAPI.Helpers.QueryStringBuilder;
 
@@ -48,7 +47,7 @@ public class YelpAPIService : IYelpAPIService
         query.AppendParam("reservation_time", queryParams.ReservationTime);
         query.AppendParam("reservation_covers", queryParams.ReservationCovers);
         query.AppendParam("matches_party_size_param", queryParams.MatchesPartySizeParam);
-        query.AppendParam<int>("limit", queryParams.Limit);
+        query.AppendParam("limit", queryParams.Limit);
         query.AppendParam("offset", queryParams.Offset);
 
         return await Client.GetAsync($"{path}{query.Get()}");

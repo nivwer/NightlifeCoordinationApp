@@ -23,7 +23,7 @@ public class Business
     public Location? Location { get; set; }
     public string? Name { get; set; }
     public string? Phone { get; set; }
-    public int[]? Price { get; set; }
+    public string? Price { get; set; }
     public double? Rating { get; set; }
 
     [JsonPropertyName("review_count")]
