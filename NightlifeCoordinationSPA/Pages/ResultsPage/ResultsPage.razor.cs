@@ -11,35 +11,50 @@ public partial class ResultsPage
 
     public BusinessListQueryDTO QueryParams = new BusinessListQueryDTO();
 
+    public bool ShowErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
+
     [Inject]
     public IBusinessesService? BusinessesService { get; set; }
 
     [Inject]
     public NavigationManager? Navigate { get; set; }
 
-    public bool ShowErrorMessage { get; set; }
-    public string? ErrorMessage { get; set; }
-
     [Parameter]
     [SupplyParameterFromQuery(Name = "query")]
-    public string? Keyword { get; set; }
+    public string? KeywordQueryParam { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "location")]
-    public string? Location { get; set; }
+    public string? LocationQueryParam { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "price")]
+    public int[]? PriceQueryParam { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "open_now")]
+    public bool? OpenNowQueryParam { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "attributes")]
+    public string[]? AttributesQueryParam { get; set; }
 
     protected override async void OnParametersSet()
     {
         ShowErrorMessage = false;
 
         if (
-            BusinessesService != null 
-            && !string.IsNullOrWhiteSpace(Keyword) 
-            && !string.IsNullOrWhiteSpace(Location)
+            BusinessesService != null
+            && !string.IsNullOrWhiteSpace(KeywordQueryParam)
+            && !string.IsNullOrWhiteSpace(LocationQueryParam)
         )
         {
-            QueryParams.Keyword = Keyword;
-            QueryParams.Location = Location;
+            QueryParams.Keyword = KeywordQueryParam;
+            QueryParams.Location = LocationQueryParam;
+            QueryParams.Price = PriceQueryParam;
+            QueryParams.OpenNow = OpenNowQueryParam;
+            QueryParams.Attributes = AttributesQueryParam;
 
             var response = await BusinessesService.GetList(QueryParams);
 
@@ -47,17 +62,11 @@ public partial class ResultsPage
             {
                 ShowErrorMessage = true;
                 string message = "An unexpected error occurred.";
-
-                if (response.Error != null)
-                    ErrorMessage = response.Error.Description ?? message;
-                else
-                    ErrorMessage = message;
+                ErrorMessage = response.Error?.Description ?? message;
             }
             else
             {
-                if (response.Businesses != null)
-                    Businesses = response.Businesses;
-
+                Businesses = response.Businesses ?? Businesses;
                 StateHasChanged();
             }
         }
