@@ -28,7 +28,8 @@
             <MudChipSet @bind-SelectedChips="CategoriesSelected" MultiSelection="true" Filter="true">
                 @foreach (var category in Categories)
                 {
-                    <MudChip Text="@category.Alias" Variant="Variant.Text" Color="Color.Secondary" Size="Size.Medium">
+                    <MudChip Text="@category.Alias" Variant="Variant.Text" Color="Color.Secondary" Size="Size.Medium"
+                        Default="@DefaultCategoriesSelected.Contains(@category.Alias)">
                         @category.Title
                     </MudChip>
                 }
@@ -44,7 +45,6 @@
                     <MudText>Nothing selected.</MudText>
                 }
             </div>
-
 
             <MudStack Row="true" Class="justify-space-between align-center">
                 <MudText>Open Now</MudText>

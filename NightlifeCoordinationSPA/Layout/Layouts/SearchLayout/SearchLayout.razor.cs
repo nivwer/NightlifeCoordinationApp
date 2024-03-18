@@ -20,6 +20,7 @@ public partial class SearchLayout
     public bool GenderNeutralRestroomsCheckBox { get; set; } = false;
 
     public MudChip[] CategoriesSelected = [];
+    public string[] DefaultCategoriesSelected = [];
 
     private readonly List<Category> Categories =
     [
@@ -70,17 +71,9 @@ public partial class SearchLayout
         Model.Keyword = KeywordQueryParam ?? string.Empty;
         Model.Location = LocationQueryParam ?? string.Empty;
         Model.Price = PriceQueryParam ?? [];
+        Model.Categories = GetCategoriesListFromQueryParams();
         Model.OpenNow = OpenNowQueryParam;
-
-        if (AttributesQueryParam != null && AttributesQueryParam.Length > 0)
-        {
-            ReservationCheckBox = AttributesQueryParam.Contains("reservation");
-            WaitlistReservationCheckBox = AttributesQueryParam.Contains("waitlist_reservation");
-            HotAndNewCheckBox = AttributesQueryParam.Contains("hot_and_new");
-            OpenToAllCheckBox = AttributesQueryParam.Contains("open_to_all");
-            WheelchairAccessibleCheckBox = AttributesQueryParam.Contains("wheelchair_accessible");
-            GenderNeutralRestroomsCheckBox = AttributesQueryParam.Contains("gender_neutral_restrooms");
-        }
+        Model.Attributes = GetAttributesListFromQueryParams();
     }
 
     public void OnValidSubmit()
@@ -90,24 +83,8 @@ public partial class SearchLayout
             if (string.IsNullOrWhiteSpace(Model.Location))
                 Model.Location = "New York, NY, United States";
 
-            Model.Attributes = new List<string>();
-
-            if (ReservationCheckBox) Model.Attributes.Append("reservation");
-            if (WaitlistReservationCheckBox) Model.Attributes.Append("waitlist_reservation");
-            if (HotAndNewCheckBox) Model.Attributes.Append("hot_and_new");
-            if (OpenToAllCheckBox) Model.Attributes.Append("open_to_all");
-            if (WheelchairAccessibleCheckBox) Model.Attributes.Append("wheelchair_accessible");
-            if (GenderNeutralRestroomsCheckBox) Model.Attributes.Append("gender_neutral_restrooms");
-
-            Model.Categories = new List<string>();
-
-            if (CategoriesSelected.Length > 0)
-            {
-                foreach (var c in CategoriesSelected)
-                {
-                    Model.Categories.Append(c.Text);
-                }
-            }
+            Model.Categories = GetCategoriesList();
+            Model.Attributes = GetAttributesList();
 
             StateHasChanged();
 
@@ -127,15 +104,96 @@ public partial class SearchLayout
 
     public void ResetValues()
     {
-        Model.Price = null;
+        Model.Price = [];
         Model.OpenNow = null;
-        Model.Attributes = [];
 
+        Model.Attributes = [];
+        ResetAttributesValues();
+
+        Model.Categories = [];
+        ResetCategoriesValues();
+    }
+
+    public List<string> GetAttributesList()
+    {
+        List<string> List = new List<string>();
+
+        if (ReservationCheckBox) List.Add("reservation");
+        if (WaitlistReservationCheckBox) List.Add("waitlist_reservation");
+        if (HotAndNewCheckBox) List.Add("hot_and_new");
+        if (OpenToAllCheckBox) List.Add("open_to_all");
+        if (WheelchairAccessibleCheckBox) List.Add("wheelchair_accessible");
+        if (GenderNeutralRestroomsCheckBox) List.Add("gender_neutral_restrooms");
+
+        return List;
+    }
+
+    public List<string> GetAttributesListFromQueryParams()
+    {
+        if (AttributesQueryParam != null && AttributesQueryParam.Length > 0)
+        {
+            ReservationCheckBox = AttributesQueryParam.Contains("reservation");
+            WaitlistReservationCheckBox = AttributesQueryParam.Contains("waitlist_reservation");
+            HotAndNewCheckBox = AttributesQueryParam.Contains("hot_and_new");
+            OpenToAllCheckBox = AttributesQueryParam.Contains("open_to_all");
+            WheelchairAccessibleCheckBox = AttributesQueryParam.Contains("wheelchair_accessible");
+            GenderNeutralRestroomsCheckBox = AttributesQueryParam.Contains("gender_neutral_restrooms");
+
+            return GetAttributesList();
+        }
+        else
+        {
+            ResetAttributesValues();
+            return new List<string>();
+        }
+    }
+
+    public void ResetAttributesValues()
+    {
         ReservationCheckBox = false;
         WaitlistReservationCheckBox = false;
         HotAndNewCheckBox = false;
         OpenToAllCheckBox = false;
         WheelchairAccessibleCheckBox = false;
         GenderNeutralRestroomsCheckBox = false;
+    }
+
+    public List<string> GetCategoriesList()
+    {
+        List<string> List = new List<string>();
+
+        if (CategoriesSelected.Length > 0)
+        {
+            foreach (var c in CategoriesSelected)
+            {
+                List.Add(c.Text);
+            }
+        }
+
+        return List;
+    }
+
+    public List<string> GetCategoriesListFromQueryParams()
+    {
+        if (CategoriesQueryParam != null && CategoriesQueryParam.Length > 0)
+        {
+            DefaultCategoriesSelected = CategoriesQueryParam;
+            return GetCategoriesList();
+        }
+        else if (CategoriesSelected.Any())
+        {
+            DefaultCategoriesSelected = GetCategoriesList().ToArray();
+            return GetCategoriesList();
+        }
+        else
+        {
+            ResetCategoriesValues();
+            return new List<string>();
+        }
+    }
+
+    public void ResetCategoriesValues()
+    {
+        CategoriesSelected = [];
     }
 }
