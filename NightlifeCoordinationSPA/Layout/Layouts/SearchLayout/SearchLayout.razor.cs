@@ -19,6 +19,7 @@ public partial class SearchLayout
     public bool WheelchairAccessibleCheckBox { get; set; } = false;
     public bool GenderNeutralRestroomsCheckBox { get; set; } = false;
 
+    public MudChip[] CategoriesSelectedSecurityCopy = [];
     public MudChip[] CategoriesSelected = [];
     public string[] DefaultCategoriesSelected = [];
 
@@ -94,9 +95,9 @@ public partial class SearchLayout
             query.AppendParam("query", Model.Keyword);
             query.AppendParam("location", Model.Location);
             query.AppendParam("price", Model.Price);
+            query.AppendParam("categories", Model.Categories);
             query.AppendParam("open_now", Model.OpenNow);
             query.AppendParam("attributes", Model.Attributes);
-            query.AppendParam("categories", Model.Categories);
 
             Navigate!.NavigateTo($"{path}{query.Get()}");
         }
@@ -143,6 +144,7 @@ public partial class SearchLayout
         }
         else
         {
+            Console.WriteLine("Reseteando Atributos");
             ResetAttributesValues();
             return new List<string>();
         }
@@ -177,16 +179,18 @@ public partial class SearchLayout
     {
         if (CategoriesQueryParam != null && CategoriesQueryParam.Length > 0)
         {
-            DefaultCategoriesSelected = CategoriesQueryParam;
-            return GetCategoriesList();
-        }
-        else if (CategoriesSelected.Any())
-        {
-            DefaultCategoriesSelected = GetCategoriesList().ToArray();
+            if (!(CategoriesSelected.Length > 0) && CategoriesSelectedSecurityCopy.Length > 0)
+                CategoriesSelected = CategoriesSelectedSecurityCopy;
+
+            if (!(CategoriesSelected.Length > 0) && !(CategoriesSelectedSecurityCopy.Length > 0))
+                DefaultCategoriesSelected = CategoriesQueryParam;
+
             return GetCategoriesList();
         }
         else
         {
+            CategoriesSelectedSecurityCopy = CategoriesSelected;
+            Console.WriteLine("Reseteando Categorias");
             ResetCategoriesValues();
             return new List<string>();
         }
