@@ -1,0 +1,79 @@
+@page "/result/{id}"
+
+<PageTitle>Nightlife - @Model.Name</PageTitle>
+
+<MudContainer>
+    <MudStack Row="true">
+    <MudCarousel Style="height:350px; width: 350px;" ShowArrows="true" ShowBullets="true"
+        EnableSwipeGesture="true" AutoCycle="true" TData="object">
+
+        @if (Model.Photos != null)
+        {
+            @foreach (var ImageUrl in Model.Photos)
+            {
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                    <div class="d-flex" style="height:100%">
+                        <MudImage ObjectFit="ObjectFit.Cover" Src="@(ImageUrl)" Style="width: 100%;"/>
+                    </div>
+                </MudCarouselItem>
+            }
+        }
+
+    </MudCarousel>
+    <MudStack>
+
+        <MudText Typo="Typo.h5">
+            @Model.Name
+        </MudText>
+         <MudStack Spacing="0" Row="true" Class="flex-wrap">
+            <MudRating ReadOnly="true" Color="Color.Secondary"
+                SelectedValue="@((int)Math.Round(Model.Rating ?? 0))" />
+
+            <MudStack Row="true" Spacing="1" Class="ml-2">
+                <MudText Typo="Typo.body2">
+                    <b>@Model.Rating</b>
+                </MudText>
+
+                <MudText Typo="Typo.body2">
+                    (@Model.ReviewCount reviews)
+                </MudText>
+            </MudStack>
+        </MudStack>
+         <MudStack Spacing="0" Row="true" Class="flex-wrap">
+
+            @if (Model.Categories != null)
+            {
+                @foreach (var category in Model.Categories)
+                {
+                    <MudChip Variant="Variant.Text" Size="Size.Small">
+                        @category.Title
+                    </MudChip>
+                }
+            }
+
+        </MudStack>
+
+        <MudStack Spacing="2" Row="true">
+            @if (Model.IsClosed.HasValue)
+            {
+                <MudText Color="@(Model.IsClosed.Value ? Color.Error : Color.Success)">
+                    <b>@(Model.IsClosed.Value ? "Closed" : "Open")</b>
+                </MudText>
+            }
+            @if (!string.IsNullOrEmpty(Model.Price) && Model.IsClosed.HasValue)
+            {
+                <MudText>
+                    <b>·</b>
+                </MudText>
+            }
+            @if (!string.IsNullOrEmpty(Model.Price))
+            {
+                <MudText>
+                    <b>@Model.Price</b>
+                </MudText>
+            }
+        </MudStack>
+    </MudStack>
+    </MudStack>
+
+</MudContainer>
