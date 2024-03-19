@@ -26,18 +26,18 @@ public partial class SearchLayout
     private readonly List<Category> Categories =
     [
         new Category { Alias = "coffee_and_tea", Title = "Coffee & Tea" },
+        new Category { Alias = "bars", Title = "Bars" },
         new Category { Alias = "ice_cream_and_frozen_yogurt", Title = "Ice Cream & Frozen Yogurt" },
         new Category { Alias = "restaurants", Title = "Restaurants" },
+        new Category { Alias = "burgers", Title = "Burgers" },
         new Category { Alias = "breakfast_and_brunch", Title = "Breakfast & Brunch" },
         new Category { Alias = "sandwiches", Title = "Sandwiches" },
-        new Category { Alias = "bars", Title = "Bars" },
-        new Category { Alias = "cocktail_bars", Title = "Cocktail Bars" },
-        new Category { Alias = "whiskey_bars", Title = "Whiskey Bars" },
-        new Category { Alias = "dance_clubs", Title = "Dance Clubs" },
         new Category { Alias = "lounges", Title = "Lounges" },
-        new Category { Alias = "burgers", Title = "Burgers" },
+        new Category { Alias = "pizza", Title = "Pizza" },
+        new Category { Alias = "cocktail_bars", Title = "Cocktail Bars" },
         new Category { Alias = "fast_food", Title = "Fast Food" },
-        new Category { Alias = "pizza", Title = "Pizza" }
+        new Category { Alias = "dance_clubs", Title = "Dance Clubs" },
+        new Category { Alias = "whiskey_bars", Title = "Whiskey Bars" },
     ];
 
     [Inject]
@@ -144,7 +144,6 @@ public partial class SearchLayout
         }
         else
         {
-            Console.WriteLine("Reseteando Atributos");
             ResetAttributesValues();
             return new List<string>();
         }
@@ -190,7 +189,6 @@ public partial class SearchLayout
         else
         {
             CategoriesSelectedSecurityCopy = CategoriesSelected;
-            Console.WriteLine("Reseteando Categorias");
             ResetCategoriesValues();
             return new List<string>();
         }

@@ -16,18 +16,19 @@ public class BusinessesService : IBusinessesService
         BasePath = "/api/business";
     }
 
-    // AGREGAR PARAMETROS
-    public async Task<BusinessResponseDTO> GetById()
+    public async Task<BusinessResponseDTO> GetById(string Id)
     {
-        string uri = BasePath;
+        string path = BasePath;
 
-        var response = await Http.GetAsync(uri);
+        var response = await Http.GetAsync($"{path}/{Id}");
 
         var oResponse = await response.Content.ReadFromJsonAsync<BusinessResponseDTO>()
             ?? new BusinessResponseDTO();
 
         if (!response.IsSuccessStatusCode)
+        {
             return oResponse;
+        }
 
         oResponse.Success = true;
 
@@ -41,6 +42,10 @@ public class BusinessesService : IBusinessesService
 
         query.AppendParam("term", queryParams.Keyword);
         query.AppendParam("location", queryParams.Location);
+        query.AppendParam("price", queryParams.Price);
+        query.AppendParam("categories", queryParams.Categories);
+        query.AppendParam("open_now", queryParams.OpenNow);
+        query.AppendParam("attributes", queryParams.Attributes);
         query.AppendParam("limit", 20);
 
         var response = await Http.GetAsync($"{path}{query.Get()}");
