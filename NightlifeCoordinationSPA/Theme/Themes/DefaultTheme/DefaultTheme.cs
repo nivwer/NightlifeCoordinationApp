@@ -14,6 +14,8 @@ public class DefaultTheme
 
         PaletteDark = new PaletteDark()
         {
+            Primary = ColorsTheme.Purple.Default,
+            Secondary = ColorsTheme.SkyBlue.Default,
             Background = ColorsTheme.Slate.Default,
             AppbarBackground = ColorsTheme.Slate.Dark,
             DrawerBackground = ColorsTheme.Slate.Dark,

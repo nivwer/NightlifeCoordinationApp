@@ -6,8 +6,7 @@
             @business.Name
         </MudText>
         <MudStack Spacing="0" Row="true" Class="flex-wrap">
-            <MudRating ReadOnly="true" Color="Color.Secondary"
-                SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
+            <MudRating ReadOnly="true" Color="Color.Primary" SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
 
             <MudStack Row="true" Spacing="1" Class="ml-2">
                 <MudText Typo="Typo.body2">
@@ -55,4 +54,7 @@
             }
         </MudStack>
     </MudStack>
+    <MudLink Href="@($"/result/{@business.Id}")" Match="NavLinkMatch.All">
+        ver
+    </MudLink>
 </MudPaper>
