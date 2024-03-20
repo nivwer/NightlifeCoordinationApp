@@ -2,78 +2,135 @@
 
 <PageTitle>Nightlife - @Model.Name</PageTitle>
 
-<MudContainer>
-    <MudStack Row="true">
-    <MudCarousel Style="height:350px; width: 350px;" ShowArrows="true" ShowBullets="true"
-        EnableSwipeGesture="true" AutoCycle="true" TData="object">
+<MudDrawer @bind-Open="@DrawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End"
+    Variant="@DrawerVariant.Responsive" Style="background-color: transparent;" Elevation="0">
+    <MudDrawerHeader Class="px-0">
+        <MudStack Row="true" Class="justify-space-between align-center">
+            <MudText Typo="Typo.h6">Details</MudText>
+        </MudStack>
+    </MudDrawerHeader>
 
-        @if (Model.Photos != null)
-        {
-            @foreach (var ImageUrl in Model.Photos)
+    <MudDrawerContainer>
+        <MudStack Spacing="4">
+            <MudText>Horas</MudText>
+            @if (Model.Hours != null)
             {
-                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
-                    <div class="d-flex" style="height:100%">
-                        <MudImage ObjectFit="ObjectFit.Cover" Src="@(ImageUrl)" Style="width: 100%;"/>
-                    </div>
-                </MudCarouselItem>
+                <MudStack Spacing="0">
+                    @foreach (var hour in Model.Hours)
+                    {
+                        @if (hour.IsOpenNow.HasValue)
+                        {
+                            <MudText>@(hour.IsOpenNow.Value ? "Abierto ahora" : "Cerrado ahora")</MudText>
+                        }
+                        @if (hour.Open != null)
+                        {
+                            <MudStack Row="true" Class="pr-8 justify-space-between">
+                                @foreach (var o in hour.Open)
+                                {
+                                    <MudStack Row="true">
+                                        <MudText Color="Color.Success">@GetDayAbbreviation(o.Day)</MudText>
+                                        <MudStack Row="true">
+                                            @if (o.Start != null && o.End != null)
+                                            {
+                                                <MudText>@FormatTime(o.Start) - @FormatTime(o.End)</MudText>
+                                            }
+                                            @if (o.IsOvernight.HasValue && o.IsOvernight.Value)
+                                            {
+                                                <MudText>De la noche</MudText>
+                                            }
+                                        </MudStack>
+                                    </MudStack>
+                                }
+                            </MudStack>
+                        }
+                    }
+                </MudStack>
             }
-        }
+        </MudStack>
 
-    </MudCarousel>
-    <MudStack>
+    </MudDrawerContainer>
+</MudDrawer>
 
-        <MudText Typo="Typo.h5">
-            @Model.Name
-        </MudText>
-         <MudStack Spacing="0" Row="true" Class="flex-wrap">
-            <MudRating ReadOnly="true" Color="Color.Secondary"
-                SelectedValue="@((int)Math.Round(Model.Rating ?? 0))" />
+<MudContainer Class="py-4">
+    <MudPaper Class="d-flex rounded-lg">
+        <MudStack Row="true">
+            <MudCarousel Style="height:350px; width: 350px;" ShowArrows="true" ShowBullets="true"
+                EnableSwipeGesture="true" AutoCycle="true" TData="object" Class="rounded-l-lg">
 
-            <MudStack Row="true" Spacing="1" Class="ml-2">
-                <MudText Typo="Typo.body2">
-                    <b>@Model.Rating</b>
+                @if (Model.Photos != null)
+                {
+                    @foreach (var ImageUrl in Model.Photos)
+                    {
+                        <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                            <div class="d-flex" style="height:100%">
+                                <MudImage ObjectFit="ObjectFit.Cover" Src="@(ImageUrl)" Style="width: 100%;" />
+                            </div>
+                        </MudCarouselItem>
+                    }
+                }
+
+            </MudCarousel>
+
+            <MudStack Spacing="1" Class="pa-5">
+                <MudText Typo="Typo.h4">
+                    @Model.Name
                 </MudText>
 
-                <MudText Typo="Typo.body2">
-                    (@Model.ReviewCount reviews)
-                </MudText>
+                <MudStack Spacing="0" Row="true" Class="flex-wrap">
+                    <MudRating ReadOnly="true" Color="Color.Primary"
+                        SelectedValue="@((int)Math.Round(Model.Rating ?? 0))" />
+
+                    <MudStack Row="true" Spacing="1" Class="ml-2">
+                        <MudText Typo="Typo.body2">
+                            <b>@Model.Rating</b>
+                        </MudText>
+
+                        <MudText Typo="Typo.body2">
+                            (@Model.ReviewCount reviews)
+                        </MudText>
+                    </MudStack>
+                </MudStack>
+
+                <MudStack Spacing="0" Row="true" Class="flex-wrap">
+
+                    @if (Model.Categories != null)
+                    {
+                        @foreach (var category in Model.Categories)
+                        {
+                            <MudChip Variant="Variant.Text" Size="Size.Small">
+                                @category.Title
+                            </MudChip>
+                        }
+                    }
+
+                </MudStack>
+
+                <MudStack Spacing="2" Row="true">
+                    @if (Model.IsClosed.HasValue)
+                    {
+                        <MudText Color="@(Model.IsClosed.Value ? Color.Error : Color.Success)">
+                            <b>@(Model.IsClosed.Value ? "Closed" : "Open")</b>
+                        </MudText>
+                    }
+                </MudStack>
+
+                @if (!string.IsNullOrEmpty(Model.Price) && Model.IsClosed.HasValue)
+                {
+                    <MudText>
+                        <b>·</b>
+                    </MudText>
+                }
+                @if (!string.IsNullOrEmpty(Model.Price))
+                {
+                    <MudText>
+                        <b>@Model.Price</b>
+                    </MudText>
+                }
             </MudStack>
         </MudStack>
-         <MudStack Spacing="0" Row="true" Class="flex-wrap">
 
-            @if (Model.Categories != null)
-            {
-                @foreach (var category in Model.Categories)
-                {
-                    <MudChip Variant="Variant.Text" Size="Size.Small">
-                        @category.Title
-                    </MudChip>
-                }
-            }
 
-        </MudStack>
 
-        <MudStack Spacing="2" Row="true">
-            @if (Model.IsClosed.HasValue)
-            {
-                <MudText Color="@(Model.IsClosed.Value ? Color.Error : Color.Success)">
-                    <b>@(Model.IsClosed.Value ? "Closed" : "Open")</b>
-                </MudText>
-            }
-            @if (!string.IsNullOrEmpty(Model.Price) && Model.IsClosed.HasValue)
-            {
-                <MudText>
-                    <b>·</b>
-                </MudText>
-            }
-            @if (!string.IsNullOrEmpty(Model.Price))
-            {
-                <MudText>
-                    <b>@Model.Price</b>
-                </MudText>
-            }
-        </MudStack>
-    </MudStack>
-    </MudStack>
 
+    </MudPaper>
 </MudContainer>
