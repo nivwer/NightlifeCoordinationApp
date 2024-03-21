@@ -1,5 +1,8 @@
 @page "/result/{id}"
 
+@using NightlifeCoordinationSPA.Components.Time.DayOfWeek
+@using NightlifeCoordinationSPA.Components.Time.DaysOfWeek
+
 <PageTitle>Nightlife - @Model.Name</PageTitle>
 
 <MudDrawer @bind-Open="@DrawerOpen" ClipMode="DrawerClipMode.Always" Anchor="Anchor.End"
@@ -12,42 +15,15 @@
 
     <MudDrawerContainer>
         <MudStack Spacing="4">
-            <MudText>Horas</MudText>
+            <MudText>Hours</MudText>
             @if (Model.Hours != null)
             {
-                <MudStack Spacing="0">
-                    @foreach (var hour in Model.Hours)
-                    {
-                        @if (hour.IsOpenNow.HasValue)
-                        {
-                            <MudText>@(hour.IsOpenNow.Value ? "Abierto ahora" : "Cerrado ahora")</MudText>
-                        }
-                        @if (hour.Open != null)
-                        {
-                            <MudStack Row="true" Class="pr-8 justify-space-between">
-                                @foreach (var o in hour.Open)
-                                {
-                                    <MudStack Row="true">
-                                        <MudText Color="Color.Success">@GetDayAbbreviation(o.Day)</MudText>
-                                        <MudStack Row="true">
-                                            @if (o.Start != null && o.End != null)
-                                            {
-                                                <MudText>@FormatTime(o.Start) - @FormatTime(o.End)</MudText>
-                                            }
-                                            @if (o.IsOvernight.HasValue && o.IsOvernight.Value)
-                                            {
-                                                <MudText>De la noche</MudText>
-                                            }
-                                        </MudStack>
-                                    </MudStack>
-                                }
-                            </MudStack>
-                        }
-                    }
-                </MudStack>
+                @foreach (var OpenHours in Model.Hours)
+                {
+                    <DaysOfWeek OpenHours="OpenHours" />
+                }
             }
         </MudStack>
-
     </MudDrawerContainer>
 </MudDrawer>
 
@@ -109,8 +85,22 @@
                     @if (Model.IsClosed.HasValue)
                     {
                         <MudText Color="@(Model.IsClosed.Value ? Color.Error : Color.Success)">
-                            <b>@(Model.IsClosed.Value ? "Closed" : "Open")</b>
+                            <b>@(Model.IsClosed.Value ? "Closed now" : "Open now")</b>
                         </MudText>
+                    }
+                    @if ((Model.Hours != null) && Model.IsClosed.HasValue)
+                    {
+
+                        <MudText>
+                            <b>·</b>
+                        </MudText>
+                    }
+                    @if (Model.Hours != null)
+                    {
+                        @foreach (var OpenHours in Model.Hours)
+                        {
+                            <DayOfWeek OpenHours="OpenHours" />
+                        }
                     }
                 </MudStack>
 
@@ -128,9 +118,6 @@
                 }
             </MudStack>
         </MudStack>
-
-
-
 
     </MudPaper>
 </MudContainer>

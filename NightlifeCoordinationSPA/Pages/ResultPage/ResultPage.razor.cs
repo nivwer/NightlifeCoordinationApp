@@ -1,6 +1,4 @@
-using System.Globalization;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using NightlifeCoordinationSPA.DTOs.BusinessDTOs;
 using NightlifeCoordinationSPA.Services.BusinessesService;
 
@@ -45,56 +43,4 @@ public partial class ResultPage
             }
         }
     }
-
-    public static string GetDayAbbreviation(int? day)
-    {
-        if (!day.HasValue)
-        {
-            return "";
-        }
-
-        string[] daysAbbreviations = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        string daysAbbreviation = daysAbbreviations[day.Value];
-
-        return daysAbbreviation;
-    }
-
-    public static string FormatTime(string time)
-    {
-        if (time == null)
-        {
-            return "";
-        }
-
-        DateTime parsedTime = DateTime.ParseExact(time, "HHmm", CultureInfo.InvariantCulture);
-        string formattedTime = parsedTime.ToString("h:mm tt", CultureInfo.InvariantCulture);
-
-        return formattedTime;
-    }
-
-    public static Color IsCurrentDayAndIsOpenNow(int? day, bool? isOpenNow)
-    {
-        if (!day.HasValue)
-        {
-            return Color.Default;
-        }
-
-        DateTime today = DateTime.Today;
-        int currentDayOfWeek = (int)today.DayOfWeek;
-
-        if (day == currentDayOfWeek)
-        {
-            if (isOpenNow.HasValue && isOpenNow.Value)
-            {
-                return Color.Success;
-            }
-            else
-            {
-                return Color.Error;
-            }
-        }
-
-        return Color.Default;
-    }
-
 }
