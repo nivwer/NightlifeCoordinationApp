@@ -1,0 +1,17 @@
+<MudStack Row="true" Class="pr-10 justify-space-between">
+    <MudText Color="@(GetTextColorByDay(OpenTime.Day))">
+        @GetDayAbbreviation(OpenTime.Day)
+    </MudText>
+    <MudStack Row="true">
+        @if (OpenTime.Start != null && OpenTime.End != null)
+        {
+            <MudText Color="@GetTextColorByTime(OpenTime.Day, OpenTime.Start, OpenTime.End)">
+                @FormatTime(OpenTime.Start) - @FormatTime(OpenTime.End)
+            </MudText>
+        }
+        @if (OpenTime.IsOvernight.HasValue && OpenTime.IsOvernight.Value)
+        {
+            <MudText>Is Overnight</MudText>
+        }
+    </MudStack>
+</MudStack>
