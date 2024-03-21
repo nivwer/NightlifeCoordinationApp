@@ -1,0 +1,11 @@
+@using NightlifeCoordinationSPA.Components.Time.Schedule
+
+@if (OpenHours.Open != null)
+{
+    <MudStack Spacing="1">
+        @foreach (var OpenTime in OpenHours.Open)
+        {
+            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
+        }
+    </MudStack>
+}

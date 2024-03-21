@@ -1,0 +1,12 @@
+@using NightlifeCoordinationSPA.Components.Time.Schedule
+
+@if (OpenHours.Open != null)
+{
+    @foreach (var OpenTime in OpenHours.Open)
+    {
+        @if (IsCurrentDay(OpenTime.Day))
+        {
+            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
+        }
+    }
+}
