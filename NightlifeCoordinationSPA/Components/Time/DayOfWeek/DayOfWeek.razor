@@ -2,11 +2,25 @@
 
 @if (OpenHours.Open != null)
 {
-    @foreach (var OpenTime in OpenHours.Open)
+    @foreach (var day in DaysOfWeekArray)
     {
-        @if (IsCurrentDay(OpenTime.Day))
+        @if (IsCurrentDay(day))
         {
-            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
+            <MudStack Row="true">
+                <MudText Color="Color.Default">
+                    @GetDayAbbreviation(day)
+                </MudText>
+                <MudStack Spacing="0">
+                    @foreach (var OpenTime in OpenHours.Open)
+                    {
+                        @if (OpenTime.Day == day)
+                        {
+                            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" OnlyOpen="true" 
+                                ColorOpen="false" />
+                        }
+                    }
+                </MudStack>
+            </MudStack>
         }
     }
 }

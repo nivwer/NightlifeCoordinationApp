@@ -13,18 +13,11 @@ public partial class Schedule
     [Parameter]
     public bool? IsOpenNow { get; set; }
 
-    public static string GetDayAbbreviation(int? day)
-    {
-        if (!day.HasValue)
-        {
-            return "";
-        }
+    [Parameter]
+    public bool OnlyOpen { get; set; }
 
-        string[] daysAbbreviations = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        string daysAbbreviation = daysAbbreviations[day.Value];
-
-        return daysAbbreviation;
-    }
+    [Parameter]
+    public bool ColorOpen { get; set; } = true;
 
     public static string FormatTime(string time)
     {
@@ -52,46 +45,49 @@ public partial class Schedule
         return day == GetCurrentDayOfWeek();
     }
 
-    public Color GetTextColorByDay(int? day)
-    {
-        if (!day.HasValue || !IsCurrentDay(day.Value))
-        {
-            return Color.Default;
-        }
 
-        if (IsOpenNow.HasValue && IsOpenNow.Value)
-        {
-            return Color.Success;
-        }
-        else
-        {
-            return Color.Error;
-        }
-    }
-
-    private Color GetTextColorByTime(int? day, string startTime, string endTime)
+    public bool IsOpenNowByTime()
     {
-        if (startTime == null || endTime == null || !day.HasValue || !IsCurrentDay(day.Value))
+        if (
+            OpenTime.Start == null || OpenTime.End == null
+            || !OpenTime.Day.HasValue || !IsCurrentDay(OpenTime.Day.Value)
+        )
         {
-            return Color.Default;
+            return false;
         }
 
         DateTime currentTime = DateTime.Now;
-        DateTime start = DateTime.ParseExact(startTime, "HHmm", CultureInfo.InvariantCulture);
-        DateTime end = DateTime.ParseExact(endTime, "HHmm", CultureInfo.InvariantCulture);
+        DateTime start = DateTime.ParseExact(OpenTime.Start, "HHmm", CultureInfo.InvariantCulture);
+        DateTime end = DateTime.ParseExact(OpenTime.End, "HHmm", CultureInfo.InvariantCulture);
 
-        if (currentTime >= start && currentTime <= end)
+        if (OpenTime.IsOvernight.HasValue && OpenTime.IsOvernight.Value)
         {
-            if (IsOpenNow.HasValue && IsOpenNow.Value)
+            if (currentTime >= start && currentTime <= end.AddDays(1))
             {
-                return Color.Success;
+                return true;
             }
-            else
+        }
+        else
+        {
+            if (
+                currentTime >= start && ((currentTime <= end)
+                || (end.Hour == 0 && end.Minute == 0 && currentTime <= end.AddDays(1)))
+            )
             {
-                return Color.Error;
+                return true;
             }
         }
 
-        return Color.Default;
+        return false;
+    }
+
+    public Color GetTextColorByTime()
+    {
+        if (!IsOpenNowByTime() || !ColorOpen)
+        {
+            return Color.Default;
+        }
+
+        return Color.Success;
     }
 }

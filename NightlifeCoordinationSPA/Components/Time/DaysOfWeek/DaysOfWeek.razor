@@ -1,11 +1,29 @@
 @using NightlifeCoordinationSPA.Components.Time.Schedule
 
-@if (OpenHours.Open != null)
-{
-    <MudStack Spacing="1">
-        @foreach (var OpenTime in OpenHours.Open)
+<MudStack Spacing="2">
+    @if (OpenHours.Open != null)
+    {
+        @foreach (var day in DaysOfWeekArray)
         {
-            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
+            <MudStack Row="true" Class="justify-space-between">
+                <MudText Color="@(GetTextColorByDay(day))">
+                    @GetDayAbbreviation(day)
+                </MudText>
+                <MudStack Spacing="0" Class="align-end">
+                    @foreach (var OpenTime in OpenHours.Open)
+                    {
+                        @if (OpenTime.Day == day)
+                        {
+                            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
+                            @if (OpenTime.IsOvernight.HasValue && OpenTime.IsOvernight.Value)
+                            {
+                                <MudText>Is Overnight</MudText>
+                            }
+                        }
+                    }
+                </MudStack>
+            </MudStack>
         }
-    </MudStack>
-}
+    }
+
+</MudStack>
