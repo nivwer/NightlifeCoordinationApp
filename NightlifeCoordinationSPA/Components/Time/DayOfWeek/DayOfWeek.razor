@@ -7,19 +7,28 @@
         @if (IsCurrentDay(day))
         {
             <MudStack Row="true">
-                <MudText Color="Color.Default">
-                    @GetDayAbbreviation(day)
-                </MudText>
-                <MudStack Spacing="0">
-                    @foreach (var OpenTime in OpenHours.Open)
+                @if (OpenHours.IsOpenNow.HasValue)
+                {
+                    <MudText Color="@(OpenHours.IsOpenNow.Value ? Color.Success : Color.Error)">
+                        <b>@(OpenHours.IsOpenNow.Value ? "Open now" : "Closed now!")</b>
+                    </MudText>
+                    @if (OpenHours.IsOpenNow.Value)
                     {
-                        @if (OpenTime.Day == day)
-                        {
-                            <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" OnlyOpen="true" 
-                                ColorOpen="false" />
-                        }
+                        <MudText><b>·</b></MudText>
+                        <MudText Color="Color.Default">
+                            @GetDayAbbreviation(day)
+                        </MudText>
+                        <MudStack Spacing="0">
+                            @foreach (var OpenTime in OpenHours.Open)
+                            {
+                                @if (OpenTime.Day == day)
+                                {
+                                    <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" OnlyOpen="true" ColorOpen="false" />
+                                }
+                            }
+                        </MudStack>
                     }
-                </MudStack>
+                }
             </MudStack>
         }
     }

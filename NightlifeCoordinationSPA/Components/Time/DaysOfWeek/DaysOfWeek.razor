@@ -15,10 +15,6 @@
                         @if (OpenTime.Day == day)
                         {
                             <Schedule OpenTime="OpenTime" IsOpenNow="OpenHours.IsOpenNow" />
-                            @if (OpenTime.IsOvernight.HasValue && OpenTime.IsOvernight.Value)
-                            {
-                                <MudText>Is Overnight</MudText>
-                            }
                         }
                     }
                 </MudStack>

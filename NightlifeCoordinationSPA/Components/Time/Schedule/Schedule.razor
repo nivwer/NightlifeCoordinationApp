@@ -5,5 +5,9 @@
         <MudText Color="@GetTextColorByTime()">
             @FormatTime(OpenTime.Start) - @FormatTime(OpenTime.End)
         </MudText>
+    } 
+    else if (IsOpenNow.HasValue && IsOpenNow.Value && !IsOpenNowByTime())
+    {
+        <MudText Color="Color.Error">( Irregular schedule )</MudText>
     }
 }
