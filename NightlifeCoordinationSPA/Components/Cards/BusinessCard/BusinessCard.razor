@@ -2,25 +2,21 @@
     <MudImage ObjectFit="ObjectFit.Cover" Height="200" Width="200" Src="@business.ImageUrl" Alt="Örebro Slott"
         Elevation="25" Class="rounded-l-lg" />
     <MudStack Spacing="1" Class="pa-5">
-        <MudText Typo="Typo.h6">
-            @business.Name
-        </MudText>
-        <MudStack Spacing="0" Row="true" Class="flex-wrap">
+        <MudLink Href="@($"/result/{@business.Id}")" Match="NavLinkMatch.All" Underline="Underline.None"
+            Color="Color.Default">
+            <MudText Typo="Typo.h6">@business.Name</MudText>
+        </MudLink>
+
+        <MudStack Spacing="0" Row="true" Class="flex-wrap align-center">
             <MudRating ReadOnly="true" Color="Color.Primary" SelectedValue="@((int)Math.Round(business.Rating ?? 0))" />
 
             <MudStack Row="true" Spacing="1" Class="ml-2">
-                <MudText Typo="Typo.body2">
-                    <b>@business.Rating</b>
-                </MudText>
-
-                <MudText Typo="Typo.body2">
-                    (@business.ReviewCount reviews)
-                </MudText>
+                <MudText Typo="Typo.body2"><b>@business.Rating</b></MudText>
+                <MudText Typo="Typo.body2">(@business.ReviewCount reviews)</MudText>
             </MudStack>
         </MudStack>
 
         <MudStack Spacing="0" Row="true" Class="flex-wrap">
-
             @if (business.Categories != null)
             {
                 @foreach (var category in business.Categories)
@@ -30,31 +26,6 @@
                     </MudChip>
                 }
             }
-
-        </MudStack>
-
-        <MudStack Spacing="2" Row="true">
-            @if (business.IsClosed.HasValue)
-            {
-                <MudText Color="@(business.IsClosed.Value ? Color.Error : Color.Success)">
-                    <b>@(business.IsClosed.Value ? "Closed" : "Open")</b>
-                </MudText>
-            }
-            @if (!string.IsNullOrEmpty(business.Price) && business.IsClosed.HasValue)
-            {
-                <MudText>
-                    <b>·</b>
-                </MudText>
-            }
-            @if (!string.IsNullOrEmpty(business.Price))
-            {
-                <MudText>
-                    <b>@business.Price</b>
-                </MudText>
-            }
         </MudStack>
     </MudStack>
-    <MudLink Href="@($"/result/{@business.Id}")" Match="NavLinkMatch.All">
-        ver
-    </MudLink>
 </MudPaper>
