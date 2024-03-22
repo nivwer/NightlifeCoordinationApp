@@ -14,7 +14,7 @@
     </MudDrawerHeader>
 
     <MudDrawerContainer>
-        <MudStack Spacing="4">
+        <MudStack Spacing="4" Style="width: 90%;">
             <MudText>Hours</MudText>
             @if (Model.Hours != null)
             {
@@ -22,6 +22,12 @@
                 {
                     <DaysOfWeek OpenHours="OpenHours" />
                 }
+            }
+            else
+            {
+                <MudText Style="width: 100%; text-align: center;">
+                    Not details
+                </MudText>
             }
         </MudStack>
     </MudDrawerContainer>
@@ -46,55 +52,50 @@
                 }
 
             </MudCarousel>
-
             <MudStack Spacing="1" Class="pa-5">
-                <MudText Typo="Typo.h4">
-                    @Model.Name
-                </MudText>
+                <MudText Typo="Typo.h4">@Model.Name</MudText>
 
-                <MudStack Spacing="0" Row="true" Class="flex-wrap">
+                <MudStack Spacing="0" Row="true" Class="flex-wrap align-center">
                     <MudRating ReadOnly="true" Color="Color.Primary"
                         SelectedValue="@((int)Math.Round(Model.Rating ?? 0))" />
 
                     <MudStack Row="true" Spacing="1" Class="ml-2">
-                        <MudText Typo="Typo.body2">
-                            <b>@Model.Rating</b>
-                        </MudText>
-
-                        <MudText Typo="Typo.body2">
-                            (@Model.ReviewCount reviews)
-                        </MudText>
+                        <MudText Typo="Typo.body2"><b>@Model.Rating</b></MudText>
+                        <MudText Typo="Typo.body2">(@Model.ReviewCount reviews)</MudText>
                     </MudStack>
                 </MudStack>
 
-                <MudStack Spacing="0" Row="true" Class="flex-wrap">
-
-                    @if (Model.Categories != null)
-                    {
+                @if (Model.Categories != null)
+                {
+                    <MudStack Spacing="0" Row="true" Class="flex-wrap">
                         @foreach (var category in Model.Categories)
                         {
                             <MudChip Variant="Variant.Text" Size="Size.Small">
                                 @category.Title
                             </MudChip>
                         }
-                    }
+                    </MudStack>
+                }
 
+                <MudStack Spacing="2" Row="true">
+                    @if (Model.IsClaimed.HasValue && Model.IsClaimed.Value)
+                    {
+                        <MudStack Spacing="1" Row="true">
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Info" Size="Size.Small" />
+                            <MudText Color="Color.Info"><b>Claimed</b></MudText>
+                        </MudStack>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Price) && Model.IsClosed.HasValue)
+                    {
+                        <MudText><b>·</b></MudText>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Price))
+                    {
+                        <MudText><b>@Model.Price</b></MudText>
+                    }
                 </MudStack>
 
                 <MudStack Spacing="2" Row="true">
-                    @if (Model.IsClosed.HasValue)
-                    {
-                        <MudText Color="@(Model.IsClosed.Value ? Color.Error : Color.Success)">
-                            <b>@(Model.IsClosed.Value ? "Closed now" : "Open now")</b>
-                        </MudText>
-                    }
-                    @if ((Model.Hours != null) && Model.IsClosed.HasValue)
-                    {
-
-                        <MudText>
-                            <b>·</b>
-                        </MudText>
-                    }
                     @if (Model.Hours != null)
                     {
                         @foreach (var OpenHours in Model.Hours)
@@ -103,21 +104,7 @@
                         }
                     }
                 </MudStack>
-
-                @if (!string.IsNullOrEmpty(Model.Price) && Model.IsClosed.HasValue)
-                {
-                    <MudText>
-                        <b>·</b>
-                    </MudText>
-                }
-                @if (!string.IsNullOrEmpty(Model.Price))
-                {
-                    <MudText>
-                        <b>@Model.Price</b>
-                    </MudText>
-                }
             </MudStack>
         </MudStack>
-
     </MudPaper>
 </MudContainer>
